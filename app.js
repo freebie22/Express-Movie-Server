@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-// const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const userRouter = require("./routes/userRouter");
@@ -13,8 +12,6 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use(cors());
-
-// app.use(fileUpload());
 
 app.use("/api/v1/users", userRouter);
 
@@ -37,6 +34,6 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`App is listening on port ${process.env.PORT}`);
+app.listen(process.env.APP_PORT || 8050, () => {
+  console.log(`App is listening on port ${process.env.APP_PORT}`);
 });

@@ -1,0 +1,18 @@
+FROM node:24
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+ENV APP_PORT=
+ENV HOST=
+ENV DIALECT=
+ENV SECRET_KEY=
+
+EXPOSE ${APP_PORT}
+
+CMD ["npm", "run", "dev"]

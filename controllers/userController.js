@@ -1,4 +1,3 @@
-require("dotenv").config();
 const { v4: uuid } = require("uuid");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -10,7 +9,7 @@ const createUser = async (req, res, next) => {
     const { email, name, password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
-      next(
+      return next(
         new HttpError(
           "Passwords are not match to each other. Please, try again",
           400
@@ -28,14 +27,16 @@ const createUser = async (req, res, next) => {
     });
 
     if (!User) {
-      next(new HttpError("An error occured while creating new user", 500));
+      return next(
+        new HttpError("An error occured while creating new user", 500)
+      );
     }
 
     res
       .status(201)
       .json({ status: true, message: "User Was created succesfully" });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 

@@ -2,8 +2,8 @@ require("dotenv").config();
 const { Sequelize, DataTypes, Op } = require("sequelize");
 
 const sequelize = new Sequelize({
-  host: process.env.HOST,
-  dialect: process.env.DIALECT,
+  host: process.env.HOST || "./dev.sqlite",
+  dialect: process.env.DIALECT || "sqlite",
   operatorsAliases: {
     $and: Op.and,
     $or: Op.or,
