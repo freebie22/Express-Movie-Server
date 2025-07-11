@@ -1,21 +1,20 @@
 const { v4: uuid } = require("uuid");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
 const { users } = require("../db/index");
 const HttpError = require("../errors/httpError");
+const ErrorHandler = require("../errors/errorHandler");
 
 const createUser = async (req, res, next) => {
   try {
-    const { email, name, password, confirmPassword } = req.body;
+    const errors = validationResult(req);
 
-    if (password !== confirmPassword) {
-      return next(
-        new HttpError(
-          "Passwords are not match to each other. Please, try again",
-          400
-        )
-      );
+    if (!errors.isEmpty()) {
+      return next(ErrorHandler(errors));
     }
+
+    const { email, name, password } = req.body;
 
     const encryptedPassword = await bcrypt.hash(password, 12);
 

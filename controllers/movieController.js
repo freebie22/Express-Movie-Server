@@ -1,5 +1,7 @@
+const { validationResult } = require("express-validator");
 const { movies, sequelize } = require("../db/index");
 const HttpError = require("../errors/httpError");
+const errorHandler = require("../errors/errorHandler");
 
 const createMovie = async (req, res, next) => {
   try {
@@ -66,13 +68,15 @@ const deleteMovie = async (req, res, next) => {
 
 const getMovieById = async (req, res, next) => {
   try {
-    const movieList = await movies.findOne({ id: req.params.id });
+    const movieList = await movies.findOne({
+      where: { id: req.params.id },
+    });
 
     if (Object.values(movieList)?.length === 0) {
       throw new HttpError("No movies were found by your request", 400);
     }
 
-    res.status(200).json({ status: true, data: movieList });
+    return res.status(200).json({ status: true, data: movieList });
   } catch (err) {
     return next(err);
   }
@@ -103,7 +107,14 @@ const getFilteredMovies = async (req, res, next) => {
 
     const filteredMovies = await movies.findAll({
       ...(searchFilter && { where: searchFilter }),
-      order: [[sort, order]],
+      order: [
+        [
+          sort === "title"
+            ? sequelize.fn("lower", sequelize.col("title"))
+            : sort,
+          order,
+        ],
+      ],
       offset: offset,
       limit: limit,
     });
@@ -160,6 +171,12 @@ const importHandler = (file, next) => {
 
 const importMovies = async (req, res, next) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return next(errorHandler(errors));
+    }
+
     const file = req.file;
 
     if (!file) {
@@ -177,7 +194,7 @@ const importMovies = async (req, res, next) => {
       );
     }
 
-    res.status(200).json({ status: true, result: result });
+    res.status(200).json({ status: true });
   } catch (err) {
     return next(err);
   }

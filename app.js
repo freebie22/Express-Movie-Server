@@ -28,7 +28,7 @@ app.use((error, req, res, next) => {
     return next(error);
   }
 
-  res.status(error?.code || 500).json({
+  res.status(error?.errorCode || 500).json({
     status: false,
     errorMessage: error.message || "An unknown error accured",
   });
