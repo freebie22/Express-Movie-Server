@@ -1,6 +1,6 @@
-# WebbyLabMovies - Express.js movies server for WebbyLab
+# Express.js movies server
 
-WebbyLabMovies is fully functional Express.js server for any kind of website in this topic.
+Moviee is fully functional Express.js server for any kind of website in this topic.
 
 ## Key Features
 
