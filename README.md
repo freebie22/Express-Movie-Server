@@ -21,7 +21,7 @@ Moviee is fully functional Express.js server for any kind of website in this top
 
 ## Getting Started
 
-To get started with WebbyLabMovies, first set up your environment variables by creating a `.env` file:
+To get started with Moviee, first set up your environment variables by creating a `.env` file:
 
 ```env
 SECRET_KEY = 
